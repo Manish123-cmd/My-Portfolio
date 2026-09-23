@@ -855,7 +855,7 @@ a {
 
 .timeline-orb {
   position: absolute;
-  top: -9px;
+  top: -11px;
   left: 50%;
   z-index: 3;
   width: 22px;
@@ -1043,7 +1043,7 @@ a {
   }
 
   .timeline-node {
-    left: 9px;
+    display: none;
   }
 
   .education-item {
@@ -1943,6 +1943,12 @@ a {
   border-radius: 24px;
   background: radial-gradient(ellipse at top left, rgba(122, 52, 255, .15), transparent 65%), rgba(22, 22, 28, .8);
   box-shadow: 0 24px 70px rgba(0, 0, 0, .25);
+  transition: border-color .35s ease, box-shadow .35s ease;
+}
+
+.contact-panel:focus-within {
+  border-color: rgba(196, 70, 255, .5);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, .25), 0 0 32px rgba(122, 52, 255, .14);
 }
 
 .contact-intro,
@@ -2057,12 +2063,25 @@ a {
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: filter .2s ease, box-shadow .2s ease;
+  transition: filter .2s ease, box-shadow .2s ease, transform .2s ease;
 }
 
-.contact-submit:hover {
+.contact-submit:not(:disabled):hover {
   filter: brightness(1.15);
   box-shadow: 0 6px 24px rgba(122, 52, 255, .25);
+  transform: translateY(-2px);
+}
+
+.contact-submit span {
+  transition: transform .2s ease;
+}
+
+.contact-submit:not(:disabled):hover span {
+  transform: translate(3px, -3px);
+}
+
+.contact-submit:not(:disabled):active {
+  transform: translateY(0);
 }
 
 .contact-submit:focus-visible {

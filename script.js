@@ -381,7 +381,7 @@ const initEducationAnimations = () => {
     });
   };
 
-  let previousActiveIndex = -1;
+  let previousActiveIndex = null;
   const setEducationState = (activeIndex) => {
     if (activeIndex === previousActiveIndex) return;
     previousActiveIndex = activeIndex;
@@ -392,7 +392,7 @@ const initEducationAnimations = () => {
     });
   };
 
-  setEducationState(0);
+  setEducationState(-1);
   educationItems.forEach((item) => {
     ScrollTrigger.create({
       trigger: item,
@@ -402,31 +402,40 @@ const initEducationAnimations = () => {
     });
   });
 
-  gsap.timeline({
+  const journey = { progress: 0 };
+  let trackHeight = 0;
+  let cardStops = [];
+  const paintJourney = () => {
+    const position = journey.progress * trackHeight;
+    gsap.set(timelineOrb, { y: position });
+    gsap.set(timelineProgress, { scaleY: journey.progress });
+    let activeIndex = -1;
+    cardStops.forEach((stop, index) => {
+      if (position >= stop) activeIndex = index;
+    });
+    setEducationState(activeIndex);
+  };
+  const measureJourney = () => {
+    trackHeight = timelineTrack.offsetHeight;
+    // Use layout positions, unaffected by the cards' reveal transforms.
+    cardStops = educationItems.map((item) => item.offsetTop);
+    paintJourney();
+  };
+  measureJourney();
+
+  gsap.to(journey, {
+    progress: 1,
+    ease: "none",
+    onUpdate: paintJourney,
     scrollTrigger: {
-      trigger: educationSection,
+      trigger: timelineTrack,
       start: "top 70%",
       end: "bottom 30%",
       scrub: .45,
       invalidateOnRefresh: true,
-      onUpdate: (self) => {
-        const activeIndex = Math.min(
-          educationItems.length - 1,
-          Math.floor(self.progress * educationItems.length)
-        );
-
-        setEducationState(activeIndex);
-      }
+      onRefresh: measureJourney
     }
-  })
-    .to(timelineProgress, {
-      scaleY: 1,
-      ease: "none"
-    }, 0)
-    .to(timelineOrb, {
-      y: () => Math.max(0, timelineTrack.offsetHeight - timelineOrb.offsetHeight),
-      ease: "none"
-    }, 0);
+  });
 
 };
 
@@ -535,6 +544,40 @@ const initCertificationAnimations = () => {
 
 };
 
+const initContactAnimations = () => {
+  if (shouldSkipIntro() || !canAnimateWithGsap()) return;
+
+  const contact = document.querySelector(".contact-panel");
+  if (!contact) return;
+
+  // Trigger each field at its own position so tall mobile forms reveal naturally.
+  const elements = contact.querySelectorAll(
+    ".contact-eyebrow, .contact-intro h3, .contact-intro p, .contact-topics, .contact-field, .contact-submit, .contact-note"
+  );
+  elements.forEach((element) => {
+    gsap.from(element, {
+      y: 30,
+      opacity: 0,
+      duration: 1.1,
+      ease: "power2.out",
+      clearProps: "transform,opacity",
+      scrollTrigger: {
+        trigger: element,
+        start: "clamp(top 90%)",
+        once: true
+      }
+    });
+  });
+
+  // Keyboard focus must never land on a still-hidden field.
+  contact.addEventListener("focusin", (event) => {
+    const element = event.target.closest(".contact-field, .contact-submit");
+    if (!element) return;
+    gsap.killTweensOf(element);
+    gsap.set(element, { clearProps: "transform,opacity" });
+  });
+};
+
 const initFooterAnimations = () => {
   if (shouldSkipIntro()) {
     return;
@@ -571,6 +614,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initStatCounters();
   initEducationAnimations();
   initCertificationAnimations();
+  initContactAnimations();
   initFooterAnimations();
 });
 
