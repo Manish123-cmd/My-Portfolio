@@ -185,6 +185,9 @@ a {
   position: absolute;
   inset: 0;
   z-index: 1;
+  /* Fade the portrait and its glow into the shared page background. */
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 calc(100% - 100px), transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 calc(100% - 100px), transparent 100%);
   transition: transform .35s ease;
 }
 
@@ -1430,8 +1433,7 @@ a {
   height: min(760px, 100svh);
   min-height: 650px;
   margin: 0 auto;
-  overflow-x: clip;
-  overflow-y: visible;
+  overflow: visible;
   isolation: isolate;
   perspective: 1400px;
 }
@@ -1768,15 +1770,6 @@ a {
   font-weight: 800;
 }
 
-.learning-stage-fade {
-  position: absolute;
-  inset: auto 0 0;
-  z-index: 5;
-  height: 120px;
-  background: linear-gradient(180deg, transparent, rgba(17, 17, 19, .78) 72%, #111113);
-  pointer-events: none;
-}
-
 @media (max-width: 900px) {
   .learning-phone-stage {
     height: min(720px, 100svh);
@@ -1819,10 +1812,6 @@ a {
     width: min(290px, 100%);
     transform: none;
     opacity: 1;
-  }
-
-  .learning-stage-fade {
-    display: none;
   }
 
   .phone-screen {
@@ -1893,16 +1882,6 @@ a {
   overflow: hidden;
   padding: clamp(72px, 8vw, 116px) clamp(18px, 6vw, 96px) clamp(28px, 4vw, 44px);
   background: transparent;
-}
-
-.site-footer::before {
-  content: "";
-  position: absolute;
-  inset: 8% clamp(18px, 5vw, 72px) auto;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255, 79, 216, .34), rgba(139, 92, 246, .28), transparent);
-  box-shadow: 0 0 22px rgba(255, 79, 216, .18);
-  pointer-events: none;
 }
 
 .footer-container {
