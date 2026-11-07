@@ -1,0 +1,357 @@
+/* ==========================================================================
+   Section: "Welcome to my World"
+   Default (no JS / reduced motion) = State 2, the split layout.
+   .is-animated (added by js/welcome.js on desktop) = pinned hero → split.
+
+   State 2 composition (desktop, one 12-column grid):
+   - top rule with labels (full width)
+   - heading (2 lines) on the columns before the photo frame, no overlap
+   - paragraph (cols 1–5) 40px under the heading, button 32px under that
+   - photo FRAME in columns 9–12: grey card, all corners rounded, from the
+     top of the heading to the bottom of "View my work"
+   - meta row (cols 1–7) on a thin rule along the bottom
+   Every position is derived from the variables below.
+   ========================================================================== */
+
+.welcome {
+  /* ---- Tunables ---- */
+  --welcome-max: 1440px;             /* max content width */
+  --welcome-pad: 5vw;                /* side margins (same as the top rule) */
+  --welcome-gap: 24px;               /* gutter */
+  --welcome-text-cols: 5;            /* paragraph width: columns 1–5 */
+  --welcome-meta-cols: 7;            /* meta row: columns 1–7 */
+  --welcome-frame-col: 9;            /* photo frame: this column to 12; the heading uses the columns before it */
+  --welcome-frame-headroom: 0.1;     /* minimum grey space above the hair, as a share of the frame height */
+  --welcome-frame-radius: 24px;      /* frame corners */
+  --welcome-photo-zoom: 1.02;        /* slight zoom so the photo's cut edges sit outside the frame */
+  --welcome-balance: 0.4;            /* block's vertical position in the free space (0 = top, 0.5 = centred) */
+  --welcome-hairline: rgba(31, 31, 31, 0.14);
+
+  /* ---- Measured from the assets (change only if the photo/font changes) ---- */
+  --welcome-hair-top: 0.257;         /* top of the hair, share of image height */
+  --welcome-line1-em: 6.18;          /* "WELCOME TO" width in em */
+
+  /* ---- Grid (don't edit) ----
+     100cqw = the section's width WITHOUT the scrollbar (100vw would include it) */
+  --welcome-content: calc(min(100cqw, var(--welcome-max) + 2 * var(--welcome-pad)) - 2 * var(--welcome-pad));
+  --welcome-col: calc((var(--welcome-content) - 11 * var(--welcome-gap)) / 12);
+  --welcome-span: calc(var(--welcome-col) + var(--welcome-gap)); /* one column + gutter */
+  --welcome-rule-bottom: calc(var(--space-5) + 1rem + var(--space-3) + 1px);
+
+  /* ---- Text group (don't edit) ---- */
+  --welcome-intro-size: clamp(1.15rem, 1.4vw, 1.4rem);
+  --welcome-meta-top: calc(100vh - var(--welcome-rule-bottom));        /* meta row is as tall as the top rule */
+  --welcome-free: calc(var(--welcome-meta-top) - var(--welcome-rule-bottom));
+  /* paragraph (≈3 lines) + gaps + button, i.e. the group minus the heading */
+  --welcome-body-h: calc(40px + 3 * 1.5 * var(--welcome-intro-size) + 32px + 54px);
+  /* heading: "WELCOME TO" fills the columns before the frame, minus one gutter (no overlap) */
+  --welcome-t: min(
+    calc(((var(--welcome-frame-col) - 1) * var(--welcome-span) - 2 * var(--welcome-gap)) / var(--welcome-line1-em)),
+    calc((var(--welcome-free) - var(--welcome-body-h) - 2 * var(--space-5)) / 1.86)
+  );
+  --welcome-group-h: calc(1.86 * var(--welcome-t) + var(--welcome-body-h));
+  --welcome-title-top: calc(
+    var(--welcome-rule-bottom)
+    + max(var(--space-5), (var(--welcome-free) - var(--welcome-group-h)) * var(--welcome-balance))
+  );
+
+  /* ---- Photo frame (don't edit): from the top of the heading to the bottom of "View my work" ---- */
+  --welcome-frame-top: calc(var(--welcome-title-top) + 0.06 * var(--welcome-t)); /* heading box top (inside its line mask) */
+  --welcome-frame-h: calc(var(--welcome-title-top) + 1.86 * var(--welcome-t) + var(--welcome-body-h) + 0.8px - var(--welcome-frame-top));
+  --welcome-frame-left: calc(var(--welcome-pad) + (var(--welcome-frame-col) - 1) * var(--welcome-span));
+  --welcome-frame-w: calc((13 - var(--welcome-frame-col)) * var(--welcome-span) - var(--welcome-gap));
+
+  /* ---- Photo inside the frame (don't edit): cover, anchored bottom-centre,
+     moved down only if the hair would otherwise be too close to the top ---- */
+  --welcome-img-h: calc(max(var(--welcome-frame-h), var(--welcome-frame-w) / 0.75) * var(--welcome-photo-zoom));
+  --welcome-img-w: calc(var(--welcome-img-h) * 0.75);
+  --welcome-img-x: calc((var(--welcome-frame-w) - var(--welcome-img-w)) / 2);
+  --welcome-img-top: max(
+    calc(var(--welcome-frame-h) - var(--welcome-img-h)),
+    calc(var(--welcome-frame-headroom) * var(--welcome-frame-h) - var(--welcome-hair-top) * var(--welcome-img-h))
+  );
+
+  container-type: inline-size;       /* enables 100cqw above */
+  position: relative;
+  background: var(--bg);
+  overflow: clip;
+}
+
+.welcome__inner {
+  position: relative;
+  max-width: calc(var(--welcome-max) + 2 * var(--welcome-pad));
+  height: 100vh;
+  margin-inline: auto;
+}
+
+/* ---------- Small editorial labels (rule + meta) ---------- */
+.welcome__label {
+  font-size: 0.75rem;              /* 12px */
+  font-weight: 500;
+  line-height: 1rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--grey-3);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* Top rule: labels above a hairline */
+.welcome__rule {
+  position: absolute;
+  z-index: 4;
+  top: var(--space-5);
+  left: var(--welcome-pad);
+  right: var(--welcome-pad);
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--welcome-hairline);
+}
+
+/* Bottom meta row: columns 1–7, thin rule above */
+.welcome__meta {
+  position: absolute;
+  z-index: 4;
+  bottom: 0;
+  left: var(--welcome-pad);
+  width: calc(var(--welcome-meta-cols) * var(--welcome-span) - var(--welcome-gap));
+  display: flex;
+  justify-content: space-between;
+  margin: 0;
+  padding: var(--space-3) 0 var(--space-5);
+  border-top: 1px solid var(--welcome-hairline);
+  list-style: none;
+}
+
+/* ---------- Text layer (in front of the frame) ---------- */
+.welcome__text {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  padding-inline: var(--welcome-pad);
+  padding-top: var(--welcome-title-top);
+  pointer-events: none;            /* the layer covers the frame; only its content is interactive */
+}
+.welcome__text > * { pointer-events: auto; }
+
+/* Kicker + subline only live in the hero state (JS animates them out) */
+.welcome__kicker,
+.welcome__sub {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 0;
+  white-space: nowrap;
+}
+.welcome:not(.is-animated) .welcome__kicker,
+.welcome:not(.is-animated) .welcome__sub { visibility: hidden; }
+
+.welcome__kicker {
+  display: flex;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--grey-3);
+}
+.welcome__kicker-in {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+}
+.welcome__avatar {
+  width: 28px;
+  height: 28px;
+  flex: none;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--grey-1);
+}
+.welcome__name {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: var(--grey-2);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.3em;
+}
+
+.welcome__title {
+  width: fit-content;
+  font-size: var(--welcome-t);      /* split-state size; the hero size is in CONFIG */
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+/* Each line is its own mask so the two lines never re-wrap */
+.welcome__line {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  padding-block: 0.06em;   /* room for glyphs inside the mask… */
+  margin-block: -0.06em;   /* …without changing the 0.9 line rhythm */
+}
+.welcome__line-in { display: inline-block; }
+
+.welcome__sub {
+  font-size: clamp(0.9375rem, 1.1vw, 1.0625rem);
+  color: var(--grey-3);
+  letter-spacing: 0.01em;
+}
+
+/* Paragraph + button: one group directly under the heading, columns 1–5 */
+.welcome__body {
+  width: calc(var(--welcome-text-cols) * var(--welcome-span) - var(--welcome-gap));
+  margin-top: 40px;
+}
+.welcome__intro {
+  max-width: 36ch;
+  font-size: var(--welcome-intro-size);
+  line-height: 1.5;
+  color: var(--ink);
+}
+.welcome__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: 32px;
+}
+
+/* ---------- Photo frame: columns 8–12, rule + 40px → bottom of "View my work" ---------- */
+.welcome__media {
+  position: absolute;
+  z-index: 1;
+  top: var(--welcome-frame-top);
+  left: var(--welcome-frame-left);
+  width: var(--welcome-frame-w);
+  height: var(--welcome-frame-h);
+  margin: 0;
+  pointer-events: none;
+}
+.welcome__parallax,
+.welcome__tilt { position: relative; height: 100%; }
+
+.welcome__clip {                     /* the frame itself (also the clip-path wipe target) */
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  border-radius: var(--welcome-frame-radius);
+  background: var(--grey-1);
+}
+.welcome__photo {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+.welcome__photo img {
+  position: absolute;
+  top: var(--welcome-img-top);
+  left: var(--welcome-img-x);
+  width: var(--welcome-img-w);
+  height: var(--welcome-img-h);
+  max-width: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* ==========================================================================
+   Animated (desktop, JS ready)
+   ========================================================================== */
+.welcome.is-animated .welcome__media,
+.welcome.is-animated .welcome__clip { will-change: transform, opacity, clip-path; }
+
+/* Hide until JS has set the hero state (failsafe shows State 2 after 3s if scripts fail) */
+.js-loading .welcome__inner {
+  opacity: 0;
+  animation: welcome-failsafe 0.01s linear 3s forwards;
+}
+@keyframes welcome-failsafe { to { opacity: 1; } }
+
+/* ==========================================================================
+   Mobile + portrait tablets (< 1024px): stacked in reading order, no overlap, no pin.
+   Keep in sync with CONFIG.breakpoint in js/welcome.js.
+   ========================================================================== */
+@media (max-width: 1023px) {
+  .welcome { --welcome-pad: 20px; }
+
+  .welcome__inner {
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    padding-inline: var(--welcome-pad);
+  }
+  .welcome__rule,
+  .welcome__text,
+  .welcome__meta,
+  .welcome__media {
+    position: static;
+  }
+  .welcome__rule { margin-top: calc(20px + 50px + var(--space-4)); } /* clears the floating nav (css/nav.css) */
+
+  .welcome__text {
+    display: block;
+    width: auto;
+    height: auto;
+    padding: 0;
+    text-align: center;
+  }
+  .welcome__hero {
+    min-height: 82svh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-5);
+  }
+  .welcome__kicker,
+  .welcome__sub,
+  .welcome:not(.is-animated) .welcome__kicker,
+  .welcome:not(.is-animated) .welcome__sub {
+    position: static;
+    visibility: visible;
+    white-space: normal;
+    justify-content: center;
+  }
+  .welcome__title {
+    margin-inline: auto;
+    font-size: clamp(2.5rem, 14.5vw, 5.5rem);
+  }
+  .welcome__line { text-align: center; }
+
+  .welcome__body {
+    width: auto;
+    margin-top: 0;
+  }
+  .welcome__intro { margin-inline: auto; font-size: 1.0625rem; }
+  .welcome__actions { justify-content: center; }
+
+  /* Frame: full width under the text, ~70vh, photo anchored bottom-centre */
+  .welcome__media {
+    order: 1;
+    align-self: center;
+    width: min(100%, 560px);
+    height: 70vh;
+    height: 70svh;
+    margin-top: var(--space-7);
+  }
+  .welcome__photo img {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 100%;
+    transform: scale(var(--welcome-photo-zoom));
+    transform-origin: 50% 100%;
+  }
+
+  .welcome__meta {
+    order: 2;
+    width: auto;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-2) var(--space-5);
+    margin-top: var(--space-5);
+    border-top: 0;
+  }
+}

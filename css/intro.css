@@ -1,0 +1,69 @@
+/* ==========================================================================
+   Intro — full-screen video before the site slides in.
+   Only shown when <html> has .intro-active (set by the inline script in
+   index.html: first visit this session, JS on, no reduced motion).
+   ========================================================================== */
+
+.intro {
+  --intro-object-position: 50% 50%;
+
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1;               /* the page (main, z 2) slides in over it */
+  overflow: hidden;
+  background: #000;
+}
+.intro-active .intro { display: block; }
+
+/* Portrait screens: keep the person (≈68–87% across the frame) in view */
+@media (orientation: portrait) {
+  .intro { --intro-object-position: 86% 50%; }
+}
+
+.intro__video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--intro-object-position);
+  background: #000;
+}
+
+/* Skip button: small, quiet, bottom-right */
+.intro__skip {
+  position: absolute;
+  right: max(var(--gutter), env(safe-area-inset-right));
+  bottom: max(var(--space-5), env(safe-area-inset-bottom));
+  min-height: 44px;
+  padding: 0 var(--space-4);
+  border: 1px solid rgba(246, 246, 244, 0.35);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.25);
+  color: #f6f6f4;
+  font: 500 0.75rem/1 var(--font);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+.intro__skip:hover { background: rgba(0, 0, 0, 0.5); border-color: rgba(246, 246, 244, 0.7); }
+.intro__skip:focus-visible { outline: 2px solid #f6f6f4; outline-offset: 3px; }
+
+/* While the intro runs: lock scrolling and park the page off-screen to the left */
+html.intro-active { overflow: hidden; }
+.intro-active main {
+  position: relative;
+  z-index: 2;
+  background: var(--bg);
+  transform: translateX(-100%);
+}
+
+/* Failsafe: if js/intro.js never runs, don't trap the visitor behind the overlay */
+html.intro-active:not(:has(.intro.is-running)) { animation: intro-failsafe-html 0.01s linear 4s forwards; }
+.intro-active .intro:not(.is-running) { animation: intro-failsafe 0.01s linear 4s forwards; }
+.intro-active:not(:has(.intro.is-running)) main { animation: intro-failsafe-main 0.01s linear 4s forwards; }
+@keyframes intro-failsafe-html { to { overflow: auto; } }
+/* opacity + off-screen transform (visibility doesn't reliably stick at the end of a keyframe) */
+@keyframes intro-failsafe { to { opacity: 0; transform: translateX(100%); } }
+@keyframes intro-failsafe-main { to { transform: none; } }

@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="800" height="800">
+  <!-- Placeholder object: a glossy pen nib drawing a bezier curve. Replace with design.webp. -->
+  <defs>
+    <linearGradient id="nib" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e6d9ff"/>
+      <stop offset=".4" stop-color="#9a63ff"/>
+      <stop offset="1" stop-color="#3a1590"/>
+    </linearGradient>
+    <linearGradient id="nibSide" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#2a0f6e"/>
+      <stop offset="1" stop-color="#5a26d6"/>
+    </linearGradient>
+    <radialGradient id="shadow" cx=".5" cy=".5" r=".5">
+      <stop offset="0" stop-color="#1a0b40" stop-opacity=".32"/>
+      <stop offset="1" stop-color="#1a0b40" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <ellipse cx="400" cy="670" rx="250" ry="46" fill="url(#shadow)"/>
+  <path d="M120 590C230 380 420 680 650 240" fill="none" stroke="#ff7ad9" stroke-width="12" stroke-linecap="round"/>
+  <g stroke="#7a34ff" stroke-width="5">
+    <path d="M120 590l120-180M650 240l-150 40"/>
+  </g>
+  <g fill="#fff" stroke="#7a34ff" stroke-width="6">
+    <rect x="226" y="396" width="28" height="28" rx="6"/>
+    <rect x="486" y="266" width="28" height="28" rx="6"/>
+    <circle cx="120" cy="590" r="16"/>
+  </g>
+  <g transform="rotate(32 470 380)">
+    <path d="M470 150l120 200-120 230-120-230z" fill="url(#nibSide)" transform="translate(16 14)"/>
+    <path d="M470 150l120 200-120 230-120-230z" fill="url(#nib)"/>
+    <path d="M470 150v250" stroke="#fff" stroke-opacity=".7" stroke-width="8" stroke-linecap="round"/>
+    <circle cx="470" cy="400" r="26" fill="#fff"/>
+    <circle cx="470" cy="400" r="12" fill="#7a34ff"/>
+    <rect x="404" y="96" width="132" height="70" rx="20" fill="url(#nibSide)"/>
+  </g>
+</svg>

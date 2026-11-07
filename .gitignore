@@ -5,3 +5,19 @@ node_modules/
 .DS_Store
 Thumbs.db
 *.log
+.taste-skill/
+
+# unslop skill output (live-site snapshots, story videos)
+/unslop/
+/unslop-story/
+unslop-story*.mp4
+
+# Files kept locally but not published (e.g. the Lloyds/Forage PDF)
+/private/
+
+# Original certificate files (published versions live in assets/certifications/).
+# The Forage/Lloyds original carries enrolment codes in its file name: never publish it.
+/Assests/Certifications/
+
+# Installed agent skills: reinstall from skills-lock.json
+/.claude/skills/

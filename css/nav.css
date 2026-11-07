@@ -1,0 +1,276 @@
+/* ==========================================================================
+   Floating pill navigation (js/nav.js)
+   Light theme by default; [data-theme="dark"] while a dark section
+   (data-nav-theme="dark") is under it. Colours come from base.css tokens.
+   ========================================================================== */
+
+.site-nav {
+  --nav-top: 20px;
+  --nav-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --nav-hidden-y: calc(-100% - var(--nav-top) - 8px);
+
+  /* light theme */
+  --nav-surface: rgba(255, 255, 255, 0.7);
+  --nav-border: rgba(31, 31, 31, 0.08);
+  --nav-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  --nav-text: var(--grey-3);
+  --nav-text-strong: var(--ink);
+  --nav-badge-bg: var(--ink);
+  --nav-badge-fg: var(--bg);
+  --nav-cta-bg: var(--ink);
+  --nav-cta-fg: var(--bg);
+  --nav-cta-hover: #3a3a38; /* same hover as .btn--filled */
+  --nav-indicator: var(--ink);
+
+  position: fixed;
+  z-index: 50;
+  top: var(--nav-top);
+  left: 0;
+  right: 0;
+  width: max-content;
+  max-width: calc(100% - 2 * var(--gutter));
+  margin-inline: auto;
+
+  /* entrance: hidden until js/nav.js adds .is-in */
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(-12px);
+  transition:
+    transform 0.6s var(--nav-ease),
+    opacity 0.5s ease,
+    visibility 0s linear 0.6s;
+}
+/* after the intro video: slide in from above the viewport instead of a small drop */
+.site-nav.from-top:not(.is-in) { transform: translateY(var(--nav-hidden-y)); }
+
+.site-nav.is-in {
+  visibility: visible;
+  opacity: 1;
+  transform: none;
+  transition:
+    transform 0.6s var(--nav-ease),
+    opacity 0.5s ease,
+    visibility 0s;
+}
+/* hide on scroll down */
+.site-nav.is-in.is-hidden { transform: translateY(var(--nav-hidden-y)); }
+
+.site-nav[data-theme="dark"] {
+  --nav-surface: rgba(20, 20, 20, 0.6);
+  --nav-border: rgba(255, 255, 255, 0.1);
+  --nav-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  --nav-text: rgba(255, 255, 255, 0.7);
+  --nav-text-strong: #fff;
+  --nav-badge-bg: #fff;
+  --nav-badge-fg: var(--ink);
+  --nav-cta-bg: #fff;
+  --nav-cta-fg: var(--ink);
+  --nav-cta-hover: var(--grey-1);
+  --nav-indicator: #fff;
+}
+
+/* ---------- Capsule ---------- */
+.nav {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 6px;
+  border: 1px solid var(--nav-border);
+  border-radius: 999px;
+  background: var(--nav-surface);
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+  backdrop-filter: blur(12px) saturate(140%);
+  box-shadow: var(--nav-shadow);
+  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.nav__logo {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 36px;
+  height: 36px;
+  margin-right: 6px;
+  border-radius: 50%;
+  background: var(--nav-badge-bg);
+  color: var(--nav-badge-fg);
+  font: 700 0.75rem/1 var(--font);
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.nav__links {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.nav__link {
+  display: block;
+  padding: 8px 16px;
+  border-radius: 999px;
+  color: var(--nav-text);
+  font: 500 0.9375rem/1.2 var(--font);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+.nav__link:hover,
+.nav__link[aria-current="page"] { color: var(--nav-text-strong); }
+
+/* Active indicator: a small dot under the active link, slides between links */
+.nav__dot {
+  position: absolute;
+  left: 0;
+  bottom: 7px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--nav-indicator);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease, background-color 0.3s ease;
+}
+.nav__dot.is-ready {
+  transition: transform 0.45s var(--nav-ease), opacity 0.3s ease, background-color 0.3s ease;
+}
+
+.nav__contact {
+  margin-left: 6px;
+  padding: 10px 22px;
+  border-radius: 999px;
+  background: var(--nav-cta-bg);
+  color: var(--nav-cta-fg);
+  font: 700 0.9375rem/1.2 var(--font);
+  text-decoration: none;
+  transition: transform 0.2s ease, background-color 0.3s ease, color 0.3s ease;
+}
+.nav__contact:hover {
+  background: var(--nav-cta-hover);
+  transform: translateY(-1px);
+}
+
+.site-nav :focus-visible {
+  outline: 2px solid var(--nav-text-strong);
+  outline-offset: 2px;
+}
+
+/* Menu button (mobile only) */
+.nav__menu-btn {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  min-height: 36px;
+  padding: 8px 16px 8px 12px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--nav-text-strong);
+  font: 500 0.9375rem/1 var(--font);
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+.nav__menu-icon {
+  display: grid;
+  gap: 5px;
+  width: 16px;
+}
+.nav__menu-icon::before,
+.nav__menu-icon::after {
+  content: "";
+  display: block;
+  height: 1.5px;
+  border-radius: 1px;
+  background: currentColor;
+}
+
+/* ==========================================================================
+   Mobile (< 768px): MK badge + Menu button, full-screen menu
+   Keep in sync with CONFIG.mobileBreakpoint in js/nav.js.
+   ========================================================================== */
+@media (max-width: 767px) {
+  .nav__links,
+  .nav__contact,
+  .nav__dot { display: none; }
+  .nav__menu-btn { display: inline-flex; }
+}
+
+.nav-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  padding: var(--nav-top, 20px) var(--gutter) var(--space-7);
+  background: var(--bg);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.nav-menu[hidden] { display: none; }
+.nav-menu.is-open { opacity: 1; }
+
+.nav-menu__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 7px;
+}
+.nav-menu__top .nav__logo {
+  --nav-badge-bg: var(--ink);
+  --nav-badge-fg: var(--bg);
+}
+.nav-menu__close {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgba(31, 31, 31, 0.14);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+}
+.nav-menu__close svg { width: 18px; height: 18px; }
+
+.nav-menu__links {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: auto 0 0;
+  padding: 0;
+  list-style: none;
+}
+.nav-menu__link {
+  display: inline-block;
+  color: var(--grey-3);
+  font: 700 clamp(3rem, 15vw, 5rem)/0.95 var(--font);
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  text-decoration: none;
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.5s ease calc(var(--i, 0) * 70ms + 80ms),
+    transform 0.6s var(--nav-ease, ease) calc(var(--i, 0) * 70ms + 80ms),
+    color 0.2s ease;
+}
+.nav-menu__link[aria-current="page"],
+.nav-menu__link:hover { color: var(--ink); }
+.nav-menu.is-open .nav-menu__link { opacity: 1; transform: none; }
+.nav-menu :focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+
+html.nav-menu-open { overflow: hidden; }
+
+/* ==========================================================================
+   Reduced motion: no sliding, instant colour changes
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .site-nav,
+  .site-nav *,
+  .site-nav.is-in,
+  .nav__dot.is-ready,
+  .nav-menu,
+  .nav-menu__link { transition: none !important; }
+  .site-nav { transform: none !important; }
+}

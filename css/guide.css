@@ -1,0 +1,254 @@
+/* ==========================================================================
+   Guide — Manish's photo avatar, site-wide (js/guide.js)
+   Layers: .guide (position: corner ↔ contact seat, via JS transform)
+             .guide__bubble (speech bubble)
+             .guide__jump   (jump / shake / bounce, via JS)
+               .guide__float (idle bob, CSS)
+                 .guide__btn
+                   .guide__tilt   (tilt toward the cursor + mood tilt)
+                   .guide__badge  (mood badge, top-right)
+                   .guide__hand   (waving hand)
+   Moods are shown with movement + a small badge (one photo, no facial changes).
+   ========================================================================== */
+
+.guide {
+  --guide-size: 64px;
+  --guide-inset: 24px;
+  --guide-ink: var(--ink);        /* badges, hand, sparkles */
+  --guide-tilt: 0deg;             /* set by JS: toward the cursor (max 4°) */
+  --guide-mood-tilt: 0deg;        /* curious: head tilt */
+
+  position: fixed;
+  z-index: 45;                    /* above content, below the nav (50), menu (60) and lightbox (80) */
+  left: var(--guide-inset);
+  bottom: var(--guide-inset);
+  width: var(--guide-size);
+  height: var(--guide-size);
+  pointer-events: none;
+}
+.guide[hidden] { display: none; }
+.guide > * { pointer-events: auto; }
+
+.guide__jump,
+.guide__float { width: 100%; height: 100%; }
+.guide__float { animation: guide-bob 3.2s ease-in-out infinite; }
+@keyframes guide-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+.guide__btn {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.guide__btn:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+
+/* ---------- Avatar: photo inside a white circle ---------- */
+.guide__tilt {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform: rotate(calc(var(--guide-tilt) + var(--guide-mood-tilt)));
+  transform-origin: 50% 85%;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.guide__avatar {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border: 1px solid var(--grey-2);
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 4px 14px rgba(31, 31, 31, 0.12);
+}
+.guide__avatar img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+/* ---------- Mood badges: ink on white, top-right ---------- */
+.guide__badge {
+  position: absolute;
+  top: -4px;
+  right: -6px;
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--grey-2);
+  border-radius: 50%;
+  background: #fff;
+  color: var(--guide-ink);
+  font: 700 12px/1 var(--font);
+  opacity: 0;
+  transform: scale(0.4);
+  transition: opacity 0.2s ease, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  pointer-events: none;
+}
+.guide__badge svg { width: 11px; height: 11px; fill: var(--guide-ink); }
+.guide[data-mood="happy"] .guide__badge--happy,
+.guide[data-mood="curious"] .guide__badge--curious,
+.guide[data-mood="worried"] .guide__badge--worried { opacity: 1; transform: none; }
+
+.guide[data-mood="curious"] { --guide-mood-tilt: -6deg; }
+
+/* ---------- Waving hand ---------- */
+.guide__hand {                 /* top-left: the bubble opens to the right (desktop) / above (mobile) */
+  position: absolute;
+  top: -6px;
+  left: -10px;
+  width: 20px;
+  height: 20px;
+  padding: 2px;
+  border: 1px solid var(--grey-2);
+  border-radius: 50%;
+  background: #fff;
+  color: var(--guide-ink);
+  opacity: 0;
+  transform-origin: 70% 90%;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+.guide__hand svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.guide[data-mood="waving"] .guide__hand { opacity: 1; animation: guide-wave 0.42s ease-in-out 4 alternate; }
+@keyframes guide-wave {
+  from { transform: rotate(-16deg); }
+  to { transform: rotate(18deg); }
+}
+
+/* ---------- Sparkles (celebrating) ---------- */
+.guide__spark {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  border-radius: 1px;
+  background: var(--guide-ink);
+  transform: rotate(45deg);
+  pointer-events: none;
+}
+.guide[data-theme="dark"] { --guide-ink: var(--bg); }
+.guide[data-theme="dark"] .guide__badge,
+.guide[data-theme="dark"] .guide__badge svg { --guide-ink: var(--ink); }
+
+/* ---------- Speech bubble ---------- */
+.guide__bubble {
+  position: absolute;
+  left: calc(100% + 14px);
+  bottom: 18px;
+  width: max-content;
+  max-width: min(240px, calc(100vw - var(--guide-size) - 3 * var(--guide-inset)));
+  padding: 12px 16px;
+  border: 1px solid rgba(31, 31, 31, 0.12);
+  border-radius: 14px;
+  background: #fff;
+  color: var(--ink);
+  box-shadow: 0 6px 24px rgba(31, 31, 31, 0.1);
+  font-size: 0.9375rem;
+  line-height: 1.4;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(6px);
+  transition: opacity 0.25s ease, transform 0.25s ease, visibility 0s linear 0.25s;
+}
+.guide__bubble.is-shown {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition: opacity 0.25s ease, transform 0.25s ease, visibility 0s;
+}
+.guide__bubble::before {         /* tail, pointing at the guide */
+  content: "";
+  position: absolute;
+  left: -6px;
+  bottom: 14px;
+  width: 10px;
+  height: 10px;
+  border-left: 1px solid rgba(31, 31, 31, 0.12);
+  border-bottom: 1px solid rgba(31, 31, 31, 0.12);
+  background: #fff;
+  transform: rotate(45deg);
+}
+.guide__text { margin: 0; min-height: 1.4em; }
+
+/* "Hide guide": appears when hovering / focusing the bubble */
+.guide__hide {
+  display: block;
+  margin: 6px 0 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--grey-3);
+  font: 500 0.75rem/1.4 var(--font);
+  text-decoration: underline;
+  text-decoration-color: var(--grey-2);
+  text-underline-offset: 0.2em;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.guide__bubble:hover .guide__hide,
+.guide__bubble:focus-within .guide__hide { opacity: 1; }
+.guide__hide:hover { color: var(--ink); }
+.guide__hide:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+/* ---------- Footer "Show guide" ---------- */
+.site-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-5) 5vw;
+  border-top: 1px solid rgba(31, 31, 31, 0.1);
+  font-size: 0.8125rem;
+  color: var(--grey-3);
+}
+.site-footer p { margin: 0; }
+.site-footer__links { display: flex; gap: var(--space-5); }
+.site-footer__links a { color: var(--grey-3); text-underline-offset: 0.2em; }
+.site-footer__links a:hover { color: var(--ink); }
+.site-footer__link {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--grey-3);
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  cursor: pointer;
+}
+.site-footer__link:hover { color: var(--ink); }
+.site-footer__link[hidden] { display: none; }
+
+/* ==========================================================================
+   Mobile
+   ========================================================================== */
+@media (max-width: 767px) {
+  .guide { --guide-size: 48px; --guide-inset: 16px; }
+  .guide__bubble {          /* above the guide */
+    left: 0;
+    bottom: calc(100% + 12px);
+    max-width: calc(100vw - 2 * var(--guide-inset));
+    font-size: 0.875rem;
+  }
+  .guide__bubble::before { left: 16px; bottom: -6px; border-left: 0; border-right: 1px solid rgba(31, 31, 31, 0.12); }
+  .guide__hide { opacity: 1; }   /* no hover on touch */
+}
+
+/* ==========================================================================
+   Reduced motion: no bob, no wave; messages only fade
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .guide__float, .guide[data-mood="waving"] .guide__hand { animation: none; }
+  .guide__tilt, .guide__badge { transition: none; }
+  .guide__bubble, .guide__bubble.is-shown { transform: none; }
+}

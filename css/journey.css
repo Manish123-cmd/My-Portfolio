@@ -1,0 +1,222 @@
+/* ==========================================================================
+   Section: Journey (#education) — js/journey.js
+   A vertical timeline: dates left, a thin line with a dot per entry in the
+   middle, content right. Full entries (Ulster, Lloyds) and compact one-line
+   entries (schools) give the list a clear hierarchy.
+   Without JS (and with reduced motion) everything is visible.
+   ========================================================================== */
+
+.journey {
+  --journey-pad: 5vw;
+  --journey-max: 1440px;
+  --journey-line: rgba(31, 31, 31, 0.14);
+  --journey-date-col: 30%;           /* width of the dates column */
+  --journey-axis: 56px;              /* width of the line column */
+
+  position: relative;
+  background: var(--bg);
+  color: var(--ink);
+}
+
+.journey__inner {
+  max-width: calc(var(--journey-max) + 2 * var(--journey-pad));
+  margin-inline: auto;
+  padding: var(--space-5) var(--journey-pad) var(--space-8);
+}
+
+.journey__label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--grey-3);
+  white-space: nowrap;
+}
+.journey__rule {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--journey-line);
+}
+.journey__title {
+  margin-top: var(--space-6);
+  font-size: clamp(3.5rem, 9vw, 8.5rem);
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+}
+
+/* ---------- Timeline ---------- */
+.journey__list {
+  position: relative;
+  margin: var(--space-8) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* The line: a quiet track + an ink fill that JS draws with scaleY */
+.journey__track {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(var(--journey-date-col) + var(--journey-axis) / 2);
+  width: 1px;
+  margin-left: -0.5px;
+  background: var(--journey-line);
+}
+.journey__line {
+  position: absolute;
+  inset: 0;
+  background: var(--ink);
+  transform-origin: 50% 0;
+}
+
+.jentry {
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--journey-date-col) var(--journey-axis) minmax(0, 1fr);
+  align-items: start;
+  padding-bottom: var(--space-8);
+  transition: opacity 0.4s ease;
+}
+.jentry:last-child { padding-bottom: 0; }
+.jentry--compact { padding-bottom: var(--space-6); }
+
+/* Dates: large, light numbers */
+.jentry__when {
+  margin: 0;
+  padding-right: var(--space-5);
+  text-align: right;
+}
+.jentry__years {
+  display: block;
+  font-size: clamp(2rem, 3.6vw, 3.25rem);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+.jentry__dates {
+  display: block;
+  margin-top: var(--space-2);
+  font-size: 0.8125rem;
+  color: var(--grey-3);
+}
+.jentry--compact .jentry__years { font-size: clamp(1.25rem, 1.8vw, 1.625rem); color: var(--grey-3); }
+.jentry--compact .jentry__dates { display: none; }
+
+/* Dot on the line */
+.jentry__dot {
+  position: relative;
+  justify-self: center;
+  width: 13px;
+  height: 13px;
+  margin-top: 0.85rem;
+  border: 1px solid var(--ink);
+  border-radius: 50%;
+  background: var(--bg);
+}
+.jentry--compact .jentry__dot { width: 9px; height: 9px; margin-top: 0.55rem; }
+.jentry__dot-fill {
+  position: absolute;
+  inset: 2px;
+  border-radius: 50%;
+  background: var(--ink);
+}
+
+/* Content */
+.jentry__body { padding-left: var(--space-5); max-width: 62ch; }
+.jentry__tag {
+  display: inline-block;
+  margin: 0;
+  padding: 3px 10px;
+  border: 1px solid rgba(31, 31, 31, 0.2);
+  border-radius: 999px;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--grey-3);
+  white-space: nowrap;
+}
+.jentry__org {
+  margin: var(--space-3) 0 0;
+  font-size: clamp(1.375rem, 2.2vw, 1.875rem);
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+}
+.jentry__role { margin: var(--space-1) 0 0; font-size: 1.0625rem; }
+.jentry__place { margin: var(--space-1) 0 0; font-size: 0.875rem; color: var(--grey-3); }
+.jentry__points {
+  display: grid;
+  gap: var(--space-2);
+  margin: var(--space-4) 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--ink);
+}
+.jentry__points li { position: relative; padding-left: 18px; }
+.jentry__points li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.7em;
+  width: 8px;
+  height: 1px;
+  background: var(--grey-3);
+}
+
+/* Compact: everything on one line */
+.jentry__line-text {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+  margin: 0;
+  font-size: 0.9375rem;
+  color: var(--grey-3);
+}
+.jentry__line-text .jentry__tag { align-self: center; }
+.jentry__line-text .jentry__org { margin: 0; font-size: 1.0625rem; color: var(--ink); }
+.jentry__line-text .jentry__place { margin: 0; font-size: inherit; }
+.jentry__sep { color: var(--grey-2); }
+.jentry--compact .jentry__body { max-width: none; }
+@media (min-width: 768px) {
+  .jentry__line-text { gap: 4px 8px; font-size: 0.875rem; }
+  .jentry__line-text > * { white-space: nowrap; }
+  .jentry__line-text .jentry__org { font-size: 1rem; }
+}
+
+/* JS: entries not under the reading line are slightly greyed */
+.journey.is-js .jentry:not(.is-current) { opacity: 0.45; }
+
+/* ==========================================================================
+   Mobile (< 768px): one column, line on the left, dates above each entry
+   ========================================================================== */
+@media (max-width: 767px) {
+  .journey { --journey-pad: 20px; }
+  .journey__inner { padding-top: calc(20px + 50px + var(--space-4)); }
+  .journey__list { margin-top: var(--space-7); }
+  .journey__track { left: 6px; }
+  .jentry,
+  .jentry--compact {
+    grid-template-columns: 13px minmax(0, 1fr);
+    column-gap: var(--space-4);
+    padding-bottom: var(--space-7);
+  }
+  .jentry__dot { grid-column: 1; grid-row: 1; justify-self: center; margin-top: 0.3rem; }
+  .jentry__when { grid-column: 2; grid-row: 1; padding: 0; text-align: left; }
+  .jentry__body { grid-column: 2; grid-row: 2; padding: var(--space-3) 0 0; }
+  .jentry__years { font-size: 1.75rem; }
+  .jentry--compact .jentry__years { font-size: 1.125rem; }
+  .jentry--compact .jentry__dot { margin-top: 0.35rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jentry { transition: none; }
+}

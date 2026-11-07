@@ -1,0 +1,129 @@
+/* ==========================================================================
+   Base — design tokens, font, reset, shared UI (buttons, focus)
+   ========================================================================== */
+
+:root {
+  /* Palette (no pure black / white) */
+  --bg: #f6f6f4;
+  --ink: #1f1f1f;
+  --grey-1: #e6e6e3;
+  --grey-2: #b9b9b5;
+  --grey-3: #6e6e6a; /* 4.7:1 on --bg — OK for small text */
+  --accent: #1f1f1f; /* placeholder: swap for a subtle colour later */
+  --bg-dark: #0f0f0f; /* dark sections (certifications) */
+  --card-dark: #1a1a1a; /* card surface on dark sections */
+
+  --font: "Inter Tight", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  --gutter: clamp(16px, 4vw, 64px);
+  --max: 1440px;
+
+  /* Spacing scale */
+  --space-1: 0.25rem;  /*  4px */
+  --space-2: 0.5rem;   /*  8px */
+  --space-3: 0.75rem;  /* 12px */
+  --space-4: 1rem;     /* 16px */
+  --space-5: 1.5rem;   /* 24px */
+  --space-6: 2.25rem;  /* 36px */
+  --space-7: 3rem;     /* 48px */
+  --space-8: 4.5rem;   /* 72px */
+}
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 1rem;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, p, figure { margin: 0; }
+img, picture { display: block; max-width: 100%; }
+a { color: inherit; }
+
+:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+::selection { background: var(--ink); color: var(--bg); }
+
+/* Hidden visually, still read by screen readers */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Lenis (inlined from lenis/dist/lenis.css) */
+html.lenis, html.lenis body { height: auto; }
+.lenis:not(.lenis-autoToggle).lenis-stopped { overflow: clip; }
+.lenis [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-smooth iframe { pointer-events: none; }
+
+/* --------------------------------------------------------------------------
+   Buttons
+   -------------------------------------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  min-height: 48px;
+  padding: 18px 32px;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  font: 500 1.05rem/1 var(--font);
+  letter-spacing: -0.005em;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+.btn[hidden] { display: none; }
+
+.btn--filled { background: var(--ink); color: var(--bg); }
+.btn--filled:hover { background: #3a3a38; border-color: #3a3a38; }
+
+.btn--outline { background: transparent; color: var(--ink); }
+.btn--outline:hover { background: var(--ink); color: var(--bg); }
+
+/* --------------------------------------------------------------------------
+   Temporary placeholder sections (delete when the real sections exist)
+   -------------------------------------------------------------------------- */
+.placeholder {
+  min-height: 80vh;
+  display: grid;
+  place-items: center;
+  padding: var(--gutter);
+  border-top: 1px solid var(--grey-1);
+  color: var(--grey-3);
+  font-size: 0.9375rem;
+}
+.placeholder__num {
+  margin-right: 0.4em;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.06em;
+}
+.placeholder--dark {
+  min-height: 100vh; /* tall enough to sit under the nav when scrolled to */
+  border-top: 0;
+  background: var(--ink);
+  color: var(--grey-2); /* 8.9:1 on --ink */
+}
