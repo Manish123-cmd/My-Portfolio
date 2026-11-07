@@ -100,6 +100,61 @@
 }
 .contact__link:hover { text-decoration-color: var(--ink); }
 
+/* ---------- Gmail / LinkedIn / GitHub chips (brand colour per chip via --brand) ---------- */
+.contact__socials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.contact__social {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 56px;
+  padding: 6px 20px 6px 6px;
+  border: 1px solid rgba(31, 31, 31, 0.12);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--ink);
+  text-decoration: none;
+  transition: border-color 0.25s ease, background-color 0.25s ease;
+}
+.contact__social-icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--brand) 10%, #fff);
+  transition: background-color 0.25s ease;
+}
+.contact__social-icon svg { width: 20px; height: 20px; fill: var(--brand); transition: fill 0.25s ease; }
+.contact__social-text { display: flex; flex-direction: column; gap: 2px; }
+.contact__social-name { font-size: 0.9375rem; font-weight: 500; line-height: 1.2; }
+.contact__social-sub { font-size: 0.75rem; line-height: 1.2; color: var(--grey-3); }
+.contact__social-arrow {
+  margin-left: var(--space-2);
+  color: var(--grey-3);
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), color 0.25s ease;
+}
+.contact__social:hover { border-color: var(--brand); background: color-mix(in srgb, var(--brand) 5%, #fff); }
+.contact__social:hover .contact__social-icon { background: var(--brand); }
+.contact__social:hover .contact__social-icon svg { fill: #fff; }
+.contact__social:hover .contact__social-arrow { color: var(--ink); transform: translate(2px, -2px); }
+.contact__social:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+@media (max-width: 767px) {
+  .contact__socials { flex-direction: column; width: 100%; }
+  .contact__social { display: flex; }
+  .contact__social-arrow { margin-left: auto; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .contact__social:hover .contact__social-arrow { transform: none; }
+}
+
 /* ---------- Form block: heading left (cols 1–4), form right (cols 6–12) ---------- */
 .contact__grid {
   display: grid;

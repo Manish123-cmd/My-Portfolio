@@ -33,9 +33,10 @@
   <link rel="stylesheet" href="css/intro.css">
   <link rel="stylesheet" href="css/welcome.css">
   <link rel="stylesheet" href="css/about.css?v=4">
+  <link rel="stylesheet" href="css/work.css?v=2">
   <link rel="stylesheet" href="css/certifications.css">
   <link rel="stylesheet" href="css/journey.css">
-  <link rel="stylesheet" href="css/contact.css">
+  <link rel="stylesheet" href="css/contact.css?v=3">
   <link rel="stylesheet" href="css/guide.css">
   <!-- Three.js (ES module) for the certificates carousel. Pinned version; jsDelivr serves the minified builds. -->
   <script type="importmap">
@@ -393,10 +394,179 @@
     </section>
     <!-- =================== /SECTION: About ===================== -->
 
-    <!-- TODO: placeholder — replace with the real Work section ("View my work" and the nav link point here) -->
-    <section id="work" class="placeholder" aria-label="Work">
-      <p><span class="placeholder__num">(03)</span> Selected work — coming next.</p>
+    <!-- ===================== SECTION: Work (js/work.js) ===================== -->
+    <!-- Projects are edited in CONFIG.projects / CONFIG.also in js/work.js, which renders the cards.
+         The cards below are a static copy of that output for visitors without JavaScript. -->
+    <section id="work" class="work" aria-labelledby="work-title">
+      <div class="work__inner">
+        <div class="work__rule">
+          <span class="work__label">(03) Work</span>
+          <span class="work__label">Selected projects</span>
+        </div>
+        <div class="work__head">
+          <h2 id="work-title" class="work__title">Selected work</h2>
+          <p class="work__count" data-work-count>04 projects</p>
+        </div>
+
+        <div class="work__stack" data-work-stack>
+      <article class="wcard" id="work-warren" style="--i:0; --accent:#18653f; --accent-ink:#18653f" aria-labelledby="work-warren-title">
+        <div class="wcard__inner">
+          <div class="wcard__text">
+            <p class="wcard__num" aria-hidden="true">01</p>
+            <h3 class="wcard__title" id="work-warren-title">Warren Street System</h3>
+            <p class="wcard__meta"><span class="wcard__status">In progress</span><span class="wcard__year">2026</span></p>
+            <p class="wcard__lead">An inventory and operations tool for Qima Cafe’s Warren Street branch.</p>
+            
+            <p class="wcard__built"><span class="wcard__built-label">What I built</span> Stock counts by date, delivery reminders, daily proofer deductions, wastage reports, orders, recipes and tray-setting photo guides, plus a sales chart.</p>
+            <ul class="wcard__highlights"><li>Scans supplier order sheets with OCR (Tesseract.js) and matches products automatically</li><li>Automated tests (Playwright) and CI (GitHub Actions)</li><li>Python tooling for weekly Excel backups</li></ul>
+            <ul class="wtags" aria-label="Built with"><li>React</li><li>Vite</li><li>JavaScript</li><li>Tesseract.js</li><li>Playwright</li><li>GitHub Actions</li><li>Python</li></ul>
+            <div class="wcard__links"><a class="wbtn wbtn--filled" href="https://manish123-cmd.github.io/Warren_Street_System/" target="_blank" rel="noopener">Live site <span class="wbtn__arrow" aria-hidden="true">↗</span><span class="work-sr"> (opens in a new tab)</span></a><a class="wbtn wbtn--outline" href="https://github.com/Manish123-cmd/Warren_Street_System" target="_blank" rel="noopener">Code <span class="wbtn__arrow" aria-hidden="true">↗</span><span class="work-sr"> (opens in a new tab)</span></a></div>
+          </div>
+          <div class="wcard__media">
+            
+          <div class="wbrowser">
+            <div class="wbrowser__bar" aria-hidden="true">
+              <span class="wbrowser__dots"><i></i><i></i><i></i></span>
+              <span class="wbrowser__url"><svg viewBox="0 0 16 16" focusable="false"><path d="M4.5 7V5.5a3.5 3.5 0 0 1 7 0V7M3.5 7h9v6.5h-9z"/></svg>manish123-cmd.github.io/Warren_Street_System</span>
+            </div>
+            <a class="wbrowser__screen" href="assets/work/warren-full.webp" target="_blank" rel="noopener" data-preview aria-label="Preview the whole Warren Street System page">
+              <img class="wbrowser__shot" src="assets/work/warren-desktop.webp" width="1600" height="1000" alt="Screenshot of Warren Street System’s stock page" loading="eager" fetchpriority="high" decoding="async">
+              <img class="wbrowser__full" data-src="assets/work/warren-full.webp" width="1600" height="2929" alt="" aria-hidden="true" decoding="async">
+              <span class="wbrowser__hint" aria-hidden="true">Hover to preview</span>
+            </a>
+          </div>
+            <div class="wphone" aria-hidden="true"><img src="assets/work/warren-mobile.webp" width="600" height="1298" alt="" loading="lazy" decoding="async"></div>
+            <a class="wbtn wbtn--outline wcard__preview" href="assets/work/warren-full.webp" target="_blank" rel="noopener" data-preview aria-label="Preview the whole Warren Street System page">Preview</a>
+          </div>
+        </div>
+        <span class="wcard__shade" aria-hidden="true"></span>
+      </article>
+      <article class="wcard" id="work-ludovic" style="--i:1; --accent:#c88739; --accent-ink:#885c27" aria-labelledby="work-ludovic-title">
+        <div class="wcard__inner">
+          <div class="wcard__text">
+            <p class="wcard__num" aria-hidden="true">02</p>
+            <h3 class="wcard__title" id="work-ludovic-title">Ludovic Monsorez — Pastry Artist</h3>
+            <p class="wcard__meta"><span class="wcard__year">2026</span></p>
+            <p class="wcard__lead">A portfolio website for a London pastry chef.</p>
+            
+            <p class="wcard__built"><span class="wcard__built-label">What I built</span> Animated hero, a gallery of ~140 photos with category tabs, career timeline, custom whisk cursor, mobile navigation.</p>
+            <ul class="wcard__highlights"><li>Scroll animations with GSAP, ScrollTrigger and Lenis</li><li>Hero icons that deep-link to matching gallery images</li></ul>
+            <ul class="wtags" aria-label="Built with"><li>HTML</li><li>CSS</li><li>JavaScript</li><li>GSAP</li><li>ScrollTrigger</li><li>Lenis</li></ul>
+            <div class="wcard__links"><a class="wbtn wbtn--filled" href="https://manish123-cmd.github.io/Ludovic_Website/" target="_blank" rel="noopener">Live site <span class="wbtn__arrow" aria-hidden="true">↗</span><span class="work-sr"> (opens in a new tab)</span></a><a class="wbtn wbtn--outline" href="https://github.com/Manish123-cmd/Ludovic_Website" target="_blank" rel="noopener">Code <span class="wbtn__arrow" aria-hidden="true">↗</span><span class="work-sr"> (opens in a new tab)</span></a></div>
+          </div>
+          <div class="wcard__media">
+            
+          <div class="wbrowser">
+            <div class="wbrowser__bar" aria-hidden="true">
+              <span class="wbrowser__dots"><i></i><i></i><i></i></span>
+              <span class="wbrowser__url"><svg viewBox="0 0 16 16" focusable="false"><path d="M4.5 7V5.5a3.5 3.5 0 0 1 7 0V7M3.5 7h9v6.5h-9z"/></svg>manish123-cmd.github.io/Ludovic_Website</span>
+            </div>
+            <a class="wbrowser__screen" href="assets/work/ludovic-full.webp" target="_blank" rel="noopener" data-preview aria-label="Preview the whole Ludovic Monsorez — Pastry Artist page">
+              <img class="wbrowser__shot" src="assets/work/ludovic-desktop.webp" width="1600" height="1000" alt="Screenshot of the Ludovic Monsorez website’s hero" loading="lazy" decoding="async">
+              <img class="wbrowser__full" data-src="assets/work/ludovic-full.webp" width="1600" height="5999" alt="" aria-hidden="true" decoding="async">
+              <span class="wbrowser__hint" aria-hidden="true">Hover to preview</span>
+            </a>
+          </div>
+            <div class="wphone" aria-hidden="true"><img src="assets/work/ludovic-mobile.webp" width="600" height="1298" alt="" loading="lazy" decoding="async"></div>
+            <a class="wbtn wbtn--outline wcard__preview" href="assets/work/ludovic-full.webp" target="_blank" rel="noopener" data-preview aria-label="Preview the whole Ludovic Monsorez — Pastry Artist page">Preview</a>
+          </div>
+        </div>
+        <span class="wcard__shade" aria-hidden="true"></span>
+      </article>
+      <article class="wcard" id="work-portfolio" style="--i:2; --accent:#1f1f1f; --accent-ink:#1f1f1f" aria-labelledby="work-portfolio-title">
+        <div class="wcard__inner">
+          <div class="wcard__text">
+            <p class="wcard__num" aria-hidden="true">03</p>
+            <h3 class="wcard__title" id="work-portfolio-title">This portfolio</h3>
+            <p class="wcard__meta"><span class="wcard__status">In progress</span><span class="wcard__year">2026</span></p>
+            <p class="wcard__lead">The site you’re on, designed and built from scratch.</p>
+            
+            
+            <ul class="wcard__highlights"><li>Scroll-driven layout transitions</li><li>A 3D WebGL certificate carousel</li><li>An interactive guide that reacts to each section</li></ul>
+            <ul class="wtags" aria-label="Built with"><li>HTML</li><li>CSS</li><li>JavaScript</li><li>GSAP</li><li>ScrollTrigger</li><li>Lenis</li><li>Three.js</li></ul>
+            <div class="wcard__links"><a class="wbtn wbtn--outline" href="https://github.com/Manish123-cmd/My-Portfolio/tree/redesign" target="_blank" rel="noopener">Code <span class="wbtn__arrow" aria-hidden="true">↗</span><span class="work-sr"> (opens in a new tab)</span></a></div>
+          </div>
+          <div class="wcard__media">
+            
+          <div class="wbrowser">
+            <div class="wbrowser__bar" aria-hidden="true">
+              <span class="wbrowser__dots"><i></i><i></i><i></i></span>
+              <span class="wbrowser__url"><svg viewBox="0 0 16 16" focusable="false"><path d="M4.5 7V5.5a3.5 3.5 0 0 1 7 0V7M3.5 7h9v6.5h-9z"/></svg>manish123-cmd.github.io/My-Portfolio</span>
+            </div>
+            <a class="wbrowser__screen" href="assets/work/portfolio-full.webp" target="_blank" rel="noopener" data-preview aria-label="Preview the whole This portfolio page">
+              <img class="wbrowser__shot" src="assets/work/portfolio-desktop.webp" width="1600" height="1000" alt="Screenshot of this portfolio’s welcome section" loading="lazy" decoding="async">
+              <img class="wbrowser__full" data-src="assets/work/portfolio-full.webp" width="1600" height="5999" alt="" aria-hidden="true" decoding="async">
+              <span class="wbrowser__hint" aria-hidden="true">Hover to preview</span>
+            </a>
+          </div>
+            <div class="wphone" aria-hidden="true"><img src="assets/work/portfolio-mobile.webp" width="600" height="1298" alt="" loading="lazy" decoding="async"></div>
+            <a class="wbtn wbtn--outline wcard__preview" href="assets/work/portfolio-full.webp" target="_blank" rel="noopener" data-preview aria-label="Preview the whole This portfolio page">Preview</a>
+          </div>
+        </div>
+        <span class="wcard__shade" aria-hidden="true"></span>
+      </article>
+      <article class="wcard" id="work-qima" style="--i:3; --accent:#d86d1b; --accent-ink:#9c4e13" aria-labelledby="work-qima-title">
+        <div class="wcard__inner">
+          <div class="wcard__text">
+            <p class="wcard__num" aria-hidden="true">04</p>
+            <h3 class="wcard__title" id="work-qima-title">QIMA Cafe</h3>
+            <p class="wcard__meta"><span class="wcard__year">2025</span></p>
+            <p class="wcard__lead">A three-page cafe website, designed in Figma and then hand-coded.</p>
+            
+            
+            <ul class="wcard__highlights"><li>The full process from Figma design to code (the Figma designs are in the repo)</li></ul>
+            <ul class="wtags" aria-label="Built with"><li>Figma</li><li>HTML</li><li>CSS</li></ul>
+            <div class="wcard__links"><a class="wbtn wbtn--filled" href="https://manish123-cmd.github.io/QIMA-Cafe/" target="_blank" rel="noopener">Live site <span class="wbtn__arrow" aria-hidden="true">↗</span><span class="work-sr"> (opens in a new tab)</span></a><a class="wbtn wbtn--outline" href="https://github.com/Manish123-cmd/QIMA-Cafe" target="_blank" rel="noopener">Code <span class="wbtn__arrow" aria-hidden="true">↗</span><span class="work-sr"> (opens in a new tab)</span></a></div>
+          </div>
+          <div class="wcard__media">
+            
+          <div class="wbrowser">
+            <div class="wbrowser__bar" aria-hidden="true">
+              <span class="wbrowser__dots"><i></i><i></i><i></i></span>
+              <span class="wbrowser__url"><svg viewBox="0 0 16 16" focusable="false"><path d="M4.5 7V5.5a3.5 3.5 0 0 1 7 0V7M3.5 7h9v6.5h-9z"/></svg>manish123-cmd.github.io/QIMA-Cafe</span>
+            </div>
+            <a class="wbrowser__screen" href="assets/work/qima-full.webp" target="_blank" rel="noopener" data-preview aria-label="Preview the whole QIMA Cafe page">
+              <img class="wbrowser__shot" src="assets/work/qima-desktop.webp" width="1600" height="1000" alt="Screenshot of the QIMA Cafe home page" loading="lazy" decoding="async">
+              <img class="wbrowser__full" data-src="assets/work/qima-full.webp" width="1600" height="3419" alt="" aria-hidden="true" decoding="async">
+              <span class="wbrowser__hint" aria-hidden="true">Hover to preview</span>
+            </a>
+          </div>
+            <div class="wphone" aria-hidden="true"><img src="assets/work/qima-mobile.webp" width="600" height="1298" alt="" loading="lazy" decoding="async"></div>
+            <a class="wbtn wbtn--outline wcard__preview" href="assets/work/qima-full.webp" target="_blank" rel="noopener" data-preview aria-label="Preview the whole QIMA Cafe page">Preview</a>
+          </div>
+        </div>
+        <span class="wcard__shade" aria-hidden="true"></span>
+      </article>
+    </div>
+
+        <div class="work__also">
+          <p class="work__label work__also-label">Also built</p>
+          <div data-work-also>
+      <article class="walso" id="work-cinewith" style="--accent:#e60a19; --accent-ink:#ca0916" aria-labelledby="work-cinewith-title">
+        <div class="walso__thumb">
+          <div class="wbrowser">
+            <div class="wbrowser__bar" aria-hidden="true">
+              <span class="wbrowser__dots"><i></i><i></i><i></i></span>
+              <span class="wbrowser__url"><svg viewBox="0 0 16 16" focusable="false"><path d="M4.5 7V5.5a3.5 3.5 0 0 1 7 0V7M3.5 7h9v6.5h-9z"/></svg>manish123-cmd.github.io/Cinewith</span>
+            </div>
+            <div class="wbrowser__screen">
+              <img class="wbrowser__shot" src="assets/work/moviehub-desktop.webp" width="1600" height="1000" alt="Screenshot of the Cinewith home page" loading="lazy" decoding="async">
+              
+            </div>
+          </div></div>
+        <div class="walso__text">
+          <p class="walso__meta"><span class="walso__tag">Team project</span><span class="wcard__year">2026</span></p>
+          <h4 class="walso__title" id="work-cinewith-title">Cinewith</h4>
+          <p class="walso__lead">A two-person team project. I built the concept and layout, the home page, navigation, movie search and live search suggestions.</p>
+          <ul class="wtags" aria-label="Built with"><li>HTML</li><li>CSS</li><li>JavaScript</li></ul>
+          <div class="wcard__links"><a class="wbtn wbtn--filled" href="https://manish123-cmd.github.io/Cinewith/" target="_blank" rel="noopener">Live site <span class="wbtn__arrow" aria-hidden="true">↗</span><span class="work-sr"> (opens in a new tab)</span></a><a class="wbtn wbtn--outline" href="https://github.com/Manish123-cmd/Cinewith" target="_blank" rel="noopener">Code <span class="wbtn__arrow" aria-hidden="true">↗</span><span class="work-sr"> (opens in a new tab)</span></a></div>
+        </div>
+      </article>
+    </div>
+        </div>
+      </div>
     </section>
+    <!-- =================== /SECTION: Work ===================== -->
 
     <!-- ===================== SECTION: Certifications (js/certifications.js + js/cert-carousel.js) ===================== -->
     <!-- The list below is the content source for every mode:
@@ -615,9 +785,24 @@
             <span class="contact__copy" data-copy-label aria-hidden="true">Copy</span>
           </button>
           <span class="visually-hidden" role="status" aria-live="polite" data-copy-status></span>
-          <a class="contact__link" href="mailto:kaflemanish452@gmail.com">Write an email <span aria-hidden="true">↗</span></a>
-          <a class="contact__link" href="https://www.linkedin.com/in/manish-kafle-2bab75386" target="_blank" rel="noopener">LinkedIn <span aria-hidden="true">↗</span></a>
-          <a class="contact__link" href="https://github.com/Manish123-cmd" target="_blank" rel="noopener">GitHub <span aria-hidden="true">↗</span></a>
+          <!-- Gmail and GitHub icons: Simple Icons (CC0). LinkedIn: simple "in" mark (LinkedIn is not in Simple Icons). -->
+          <ul class="contact__socials" role="list">
+            <li><a class="contact__social" href="mailto:kaflemanish452@gmail.com" style="--brand:#ea4335">
+              <span class="contact__social-icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/></svg></span>
+              <span class="contact__social-text"><span class="contact__social-name">Gmail</span><span class="contact__social-sub">Write an email</span></span>
+              <span class="contact__social-arrow" aria-hidden="true">↗</span>
+            </a></li>
+            <li><a class="contact__social" href="https://www.linkedin.com/in/manish-kafle-2bab75386" target="_blank" rel="noopener" style="--brand:#0a66c2">
+              <span class="contact__social-icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M4 2h16a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm2.5 7.5v8h2.6v-8zm1.3-4.1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm3.6 4.1v8H14v-4.3c0-1.2.5-1.9 1.5-1.9s1.4.7 1.4 1.9v4.3h2.6v-4.9c0-2.4-1.3-3.3-3-3.3-1.3 0-2.1.6-2.5 1.2V9.5z"/></svg></span>
+              <span class="contact__social-text"><span class="contact__social-name">LinkedIn</span><span class="contact__social-sub">Manish Kafle</span></span>
+              <span class="contact__social-arrow" aria-hidden="true">↗</span><span class="visually-hidden"> (opens in a new tab)</span>
+            </a></li>
+            <li><a class="contact__social" href="https://github.com/Manish123-cmd" target="_blank" rel="noopener" style="--brand:#181717">
+              <span class="contact__social-icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></span>
+              <span class="contact__social-text"><span class="contact__social-name">GitHub</span><span class="contact__social-sub">@Manish123-cmd</span></span>
+              <span class="contact__social-arrow" aria-hidden="true">↗</span><span class="visually-hidden"> (opens in a new tab)</span>
+            </a></li>
+          </ul>
         </div>
 
         <div class="contact__grid">
@@ -695,6 +880,20 @@
   </footer>
 
   <!-- Intro runs immediately (not deferred) so the video starts without waiting for the CDN -->
+
+  <!-- Work: full-page preview (js/work.js) -->
+  <dialog class="work-lb" data-work-lightbox aria-labelledby="work-lb-title">
+    <div class="work-lb__bar">
+      <p class="work-lb__title" id="work-lb-title" data-work-lightbox-title></p>
+      <button class="work-lb__close" type="button" data-work-lightbox-close aria-label="Close preview">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+    </div>
+    <div class="work-lb__scroll" data-work-lightbox-scroll data-lenis-prevent tabindex="0">
+      <img class="work-lb__img" data-work-lightbox-img alt="" decoding="async">
+    </div>
+  </dialog>
+
   <script src="js/intro.js"></script>
 
   <!-- Libraries: exact pinned versions + Subresource Integrity -->
@@ -711,6 +910,7 @@
   <script src="js/stepper.js" defer></script>
   <script src="js/welcome.js" defer></script>
   <script src="js/about.js?v=3" defer></script>
+  <script src="js/work.js?v=5" defer></script>
   <script src="js/certifications.js" defer></script>
   <script src="js/journey.js" defer></script>
   <script src="js/contact.js" defer></script>
