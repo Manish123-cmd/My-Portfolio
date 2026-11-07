@@ -120,9 +120,9 @@
         accent: '#d86d1b',
         accentInk: '#9c4e13',
         shots: {
-          desktop: 'assets/work/qima-desktop.webp',
-          full: 'assets/work/qima-full.webp', fullHeight: 3419,
-          mobile: 'assets/work/qima-mobile.webp',
+          desktop: 'assets/work/qima-desktop.webp?v=2',
+          full: 'assets/work/qima-full.webp?v=2', fullHeight: 3419,
+          mobile: 'assets/work/qima-mobile.webp?v=2',
           alt: 'Screenshot of the QIMA Cafe home page',
         },
       },
