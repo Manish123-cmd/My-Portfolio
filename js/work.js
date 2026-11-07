@@ -385,7 +385,9 @@
       const tl = gsap.timeline({
         scrollTrigger: { trigger: section, start: () => `top+=${naturalTop(card)} ${D.start}`, toggleActions: 'play none none reverse', invalidateOnRefresh: true },
       });
-      tl.fromTo(card, { opacity: 0 }, { opacity: 1, duration: 0.05, ease: 'none' }, 0)
+      // While it waits above the screen it is invisible AND ignores the mouse, so it never
+      // blocks what is really there (e.g. the About skill tiles). Keyboard focus still works.
+      tl.fromTo(card, { opacity: 0, pointerEvents: 'none' }, { opacity: 1, pointerEvents: 'auto', duration: 0.05, ease: 'none' }, 0)
         .fromTo(card, { y: fromY, rotation: D.tilt }, { y: 0, rotation: 0.5, duration: D.fall, ease: D.fallEase }, 0)
         .to(card, { y: -D.bounce, rotation: 0, duration: 0.18, ease: 'power2.out' })
         .to(card, { y: 0, duration: 0.2, ease: 'power2.in' });
