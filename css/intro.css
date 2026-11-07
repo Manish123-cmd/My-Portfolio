@@ -60,9 +60,9 @@ html.intro-active { overflow: hidden; }
 }
 
 /* Failsafe: if js/intro.js never runs, don't trap the visitor behind the overlay */
-html.intro-active:not(:has(.intro.is-running)) { animation: intro-failsafe-html 0.01s linear 4s forwards; }
-.intro-active .intro:not(.is-running) { animation: intro-failsafe 0.01s linear 4s forwards; }
-.intro-active:not(:has(.intro.is-running)) main { animation: intro-failsafe-main 0.01s linear 4s forwards; }
+html.intro-active:not(:has(.intro.is-running)) { animation: intro-failsafe-html 0.01s linear 10s forwards; }
+.intro-active .intro:not(.is-running) { animation: intro-failsafe 0.01s linear 10s forwards; }
+.intro-active:not(:has(.intro.is-running)) main { animation: intro-failsafe-main 0.01s linear 10s forwards; }
 @keyframes intro-failsafe-html { to { overflow: auto; } }
 /* opacity + off-screen transform (visibility doesn't reliably stick at the end of a keyframe) */
 @keyframes intro-failsafe { to { opacity: 0; transform: translateX(100%); } }

@@ -17,7 +17,8 @@
     oncePerSession: true,        // false = play on every page load
     storageKey: 'mk-intro-seen', // must match the inline script in index.html
 
-    startTimeout: 4000,          // ms: if playback hasn't started by then, skip to the slide-in
+    startTimeout: 9000,          // ms: if playback hasn't started by then, skip to the slide-in (phones on slow data need time)
+    portraitPoster: 'assets/video/intro-poster-portrait.webp', // first frame of intro-portrait.mp4
     holdLastFrame: 0.5,          // s: pause on the last frame after the video ends
     holdOnSkip: 0,               // s: pause after "Skip intro" / Escape / fallbacks
 
@@ -60,8 +61,17 @@
   window.scrollTo(0, 0);
 
   /* ---------- Playback ---------- */
+  // Portrait phones play a portrait crop (see the <source media> list in index.html)
+  if (window.matchMedia('(max-width: 900px) and (orientation: portrait)').matches) video.poster = CONFIG.portraitPoster;
+  video.addEventListener('loadedmetadata', () => {
+    // The portrait file is already framed on the person: centre it instead of the 86% offset
+    if (/intro-portrait/.test(video.currentSrc)) intro.style.setProperty('--intro-object-position', '50% 50%');
+  }, { once: true });
+
   video.preload = 'auto';
   video.muted = true; // required for autoplay
+  video.setAttribute('muted', '');       // iOS checks the attribute, not just the property
+  video.setAttribute('playsinline', '');
   video.load();
 
   video.addEventListener('playing', () => {
