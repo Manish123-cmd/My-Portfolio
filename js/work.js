@@ -147,8 +147,12 @@
     ],
 
     stack: {
-      breakpoint: 1200,      // px. Narrower: plain cards, no stacking (two columns from 1024px, see css/work.css)
-      minHeight: 760,        // px. Shorter viewports: plain cards (the fixed-height card would not fit)
+      // Cards stack on every screen size. On large screens every card has the same fixed
+      // height (85% of the screen) and sticks near the top; elsewhere a card keeps its own
+      // height and, if it is taller than the screen, sticks once its bottom edge is in view.
+      fixedMinWidth: 1200,   // px: fixed-height cards from this width…
+      fixedMinHeight: 760,   // px: …and this height (and only if every card's text fits)
+      bottomGap: 16,         // px: a tall card sticks this far above the bottom of the screen
       scale: 0.94,           // a card's scale once the next card covers it
       shade: 0.16,           // how dark it gets (opacity of a black layer)
     },
@@ -280,8 +284,11 @@
   function naturalTop(el) {
     const i = cards.indexOf(el);
     if (i > -1 && section.classList.contains('is-stack')) {
+      // sticky cards report a shifted offsetTop, so add up the cards above instead
       const gap = parseFloat(getComputedStyle(stackEl).rowGap) || 0;
-      return stackEl.offsetTop + i * (el.offsetHeight + gap);
+      let y = stackEl.offsetTop;
+      for (let k = 0; k < i; k++) y += cards[k].offsetHeight + gap;
+      return y;
     }
     let y = 0;
     for (let n = el; n && n !== section; n = n.offsetParent) y += n.offsetTop;
@@ -300,8 +307,7 @@
     const mm = gsap.matchMedia();
     mm.add(
       {
-        stack: `(min-width: ${S.breakpoint}px) and (min-height: ${S.minHeight}px) and (prefers-reduced-motion: no-preference)`,
-        plain: `((max-width: ${S.breakpoint - 1}px) or (max-height: ${S.minHeight - 1}px)) and (prefers-reduced-motion: no-preference)`,
+        stack: '(prefers-reduced-motion: no-preference)',
         reduce: '(prefers-reduced-motion: reduce)',
         hover: '(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)',
       },
@@ -326,10 +332,28 @@
      ======================================================================== */
   function setupStack() {
     section.classList.add('is-stack');
-    // A card whose text does not fit its fixed height: keep plain cards instead
-    const overflows = cards.some((c) => { const inner = c.querySelector('.wcard__inner'); return inner.scrollHeight > inner.clientHeight + 1; });
-    if (overflows) { section.classList.remove('is-stack'); return null; }
-    const stickyTop = (card) => parseFloat(getComputedStyle(card).top) || 0;
+    const cssPx = (name, fallback) => parseFloat(getComputedStyle(section).getPropertyValue(name)) || fallback;
+    const stickyTop = (card) => parseFloat(card.style.getPropertyValue('--sticky-top')) || 0;
+    const overflows = (c) => { const inner = c.querySelector('.wcard__inner'); return inner.scrollHeight > inner.clientHeight + 1; };
+
+    // Decide fixed vs. natural card heights and where each card sticks (re-run on every resize)
+    function place() {
+      section.classList.add('is-fixed');
+      const fixed = window.innerWidth >= S.fixedMinWidth && window.innerHeight >= S.fixedMinHeight && !cards.some(overflows);
+      if (!fixed) section.classList.remove('is-fixed');
+      const top0 = cssPx('--stack-top', 96);
+      const peek = cssPx('--stack-peek', 14);
+      cards.forEach((card, i) => {
+        let t = top0 + i * peek;
+        const h = card.offsetHeight;
+        const tall = t + h > window.innerHeight - S.bottomGap;
+        if (tall) t = window.innerHeight - h - S.bottomGap; // stick by the bottom edge
+        card.style.setProperty('--sticky-top', `${Math.round(t)}px`);
+        card.classList.toggle('is-tall', tall);
+      });
+    }
+    place();
+    ScrollTrigger.addEventListener('refreshInit', place);
 
     cards.forEach((card, i) => {
       const next = cards[i + 1];
@@ -358,17 +382,18 @@
       const nextR = cards[i + 1] && cards[i + 1].getBoundingClientRect();
       const covered = nextR && nextR.top < r.bottom - 8;
       if (!covered && r.top >= 0 && r.bottom <= window.innerHeight) return;
-      const stackTop = stackEl.getBoundingClientRect().top + window.scrollY;
-      const gap = parseFloat(getComputedStyle(stackEl).rowGap) || 0;
-      const y = stackTop + i * (card.offsetHeight + gap) - stickyTop(card);
+      const sectionTop = section.getBoundingClientRect().top + window.scrollY;
+      const y = sectionTop + naturalTop(card) - stickyTop(card);
       if (lenis()) lenis().scrollTo(y, { duration: 0.6, force: true });
       else window.scrollTo({ top: y });
     }
     section.addEventListener('focusin', onFocusIn);
 
     return () => {
-      section.classList.remove('is-stack');
+      section.classList.remove('is-stack', 'is-fixed');
       section.removeEventListener('focusin', onFocusIn);
+      ScrollTrigger.removeEventListener('refreshInit', place);
+      cards.forEach((card) => { card.style.removeProperty('--sticky-top'); card.classList.remove('is-tall'); });
       gsap.set(cards, { clearProps: 'transform' });
     };
   }

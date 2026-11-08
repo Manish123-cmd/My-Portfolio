@@ -355,3 +355,61 @@
     border-top: 0;
   }
 }
+
+/* ==========================================================================
+   Phones & tablets with room for it (< 1024px wide, ≥ 560px tall): one screen,
+   pinned like desktop. State 2 = heading top-left, intro + button, photo filling
+   the rest of the screen, meta row at the bottom. js/welcome.js animates the
+   centred hero into it. (Shorter screens keep the stacked layout above.)
+   Keep in sync with CONFIG.minStageHeight in js/welcome.js.
+   ========================================================================== */
+@media (max-width: 1023px) and (min-height: 560px) {
+  .welcome__inner { height: 100vh; height: 100svh; }
+  .welcome__text { margin-top: var(--space-6); text-align: left; }
+  .welcome__hero { display: block; min-height: 0; }
+  /* kicker + subline only live in the hero state, positioned by JS (as on desktop) */
+  .welcome__kicker,
+  .welcome__sub {
+    position: absolute;
+    top: 0;
+    left: 0;
+    white-space: nowrap;
+    justify-content: flex-start;
+  }
+  .welcome:not(.is-animated) .welcome__kicker,
+  .welcome:not(.is-animated) .welcome__sub { position: absolute; visibility: hidden; }
+  .welcome__title {
+    margin-inline: 0;
+    /* "WELCOME TO" fills the width */
+    font-size: min(calc((100cqw - 2 * var(--welcome-pad)) / 6.3), 5.5rem);
+  }
+  .welcome__line { text-align: left; }
+  .welcome__body { margin-top: var(--space-5); }
+  .welcome__intro { margin-inline: 0; font-size: clamp(0.9375rem, 3.9vw, 1.125rem); }
+  .welcome__actions { justify-content: flex-start; margin-top: var(--space-5); }
+  .welcome__media {
+    flex: 1 1 0;
+    min-height: 0;
+    width: min(100%, 560px);          /* tablets: not too wide, so the photo frames head + shoulders */
+    height: auto;
+    margin-top: var(--space-5);
+    align-self: center;
+  }
+  .welcome__photo img { object-position: 50% 30%; transform-origin: 50% 30%; } /* keep the face in view */
+  .welcome__meta {
+    justify-content: space-between;
+    gap: var(--space-1) var(--space-4);
+    margin-top: var(--space-4);
+    padding: var(--space-3) 0 var(--space-4);
+    border-top: 1px solid var(--welcome-hairline);
+  }
+}
+/* Phones: tighter spacing so the photo gets more of the screen; "Scroll" hint dropped */
+@media (max-width: 767px) and (min-height: 560px) {
+  .welcome__text { margin-top: var(--space-4); }
+  .welcome__body,
+  .welcome__actions,
+  .welcome__media { margin-top: var(--space-4); }
+  .welcome__meta { margin-top: var(--space-3); padding: var(--space-2) 0 var(--space-3); }
+  .welcome__meta li:last-child { display: none; }
+}

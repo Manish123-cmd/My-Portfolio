@@ -358,9 +358,10 @@ div.wbrowser__screen { cursor: default; }
 .work.is-stack .work__stack { row-gap: 12vh; }
 .work.is-stack .wcard {
   position: sticky;
-  top: calc(var(--stack-top) + var(--i) * var(--stack-peek));
-  height: var(--card-h);
+  top: var(--sticky-top, calc(var(--stack-top) + var(--i) * var(--stack-peek))); /* set per card by JS */
 }
+.work.is-stack.is-fixed .wcard { height: var(--card-h); }   /* large screens: equal, fixed-height cards */
+.work.is-stack .wcard.is-tall { transform-origin: 50% 100%; } /* taller than the screen: shrinks toward its visible bottom */
 
 /* ---------- Also built ---------- */
 .work__also { margin-top: var(--space-8); }

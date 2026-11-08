@@ -165,7 +165,9 @@ export async function createCarousel({ container, items, config = {}, onPick, on
     // the card's edges are bent toward the camera by e; use the edge for both checks
     const e = bendR * (1 - Math.cos(W / 2 / bendR));
     const ex = bendR * Math.sin(W / 2 / bendR);
-    const byWidth = ex / (C.cardWidthFrac * tanH) + e;     // distance from the card centre plane
+    // cardWidthFrac may be a function of the canvas size (bigger cards on portrait screens)
+    const frac = typeof C.cardWidthFrac === 'function' ? C.cardWidthFrac(w, h) : C.cardWidthFrac;
+    const byWidth = ex / (frac * tanH) + e;                // distance from the card centre plane
     const byHeight = H / 2 / (C.cardHeightFrac * tanV) + e;
     camera.position.set(0, 0, ringR + Math.max(byWidth, byHeight));
     camera.lookAt(0, 0, ringR);

@@ -28,7 +28,8 @@
 }
 .certs.is-gl .certs__inner {
   height: 100vh;
-  min-height: 620px;
+  height: 100svh;          /* phones: the height without the browser toolbars */
+  min-height: 560px;
 }
 
 /* ---------- Editorial labels ---------- */

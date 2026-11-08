@@ -13,14 +13,15 @@
      CONFIG
      ------------------------------------------------------------------------ */
   const CONFIG = {
-    breakpoint: 768,        // px; below = flat carousel (keep in sync with css/certifications.css)
+    // The 3D carousel runs on every screen size (the flat one is only for no WebGL / reduced motion)
     stepVh: 60,             // pinned scroll per certificate (vh)
     tailVh: 20,             // pinned scroll after the last certificate before the section unpins
     stepDuration: 0.9,      // s per step (eased rotation)
     preloadMargin: 600,     // px before the section reaches the viewport: load Three.js + textures
     ticker: { duration: 0.55, ease: 'power3.inOut' },
     carousel: {             // passed to js/cert-carousel.js (see its DEFAULTS for every option)
-      cardWidthFrac: 0.44,
+      // active card width as a share of the screen: wide screens 44%, phones in portrait up to 80%
+      cardWidthFrac: (w, h) => (w / h >= 1.3 ? 0.44 : Math.min(0.82, 0.44 + (1.3 - w / h) * 0.9)),
       gap: 0.07,
       tiltDeg: 2.5,
       dimSide: 0.42,
@@ -107,19 +108,17 @@
 
   let teardown = null;
   let mode = null;
-  const mq = window.matchMedia(`(min-width: ${CONFIG.breakpoint}px)`);
   const rm = window.matchMedia('(prefers-reduced-motion: reduce)');
   let glFailed = false;
 
   function choose() {
-    const want = mq.matches && !rm.matches && !glFailed && webglAvailable() ? 'gl' : 'flat';
+    const want = !rm.matches && !glFailed && webglAvailable() ? 'gl' : 'flat';
     if (want === mode) return;
     if (teardown) teardown();
     teardown = want === 'gl' ? startGL() : startFlat();
     mode = want;
     ScrollTrigger.refresh();
   }
-  mq.addEventListener('change', choose);
   rm.addEventListener('change', choose);
   const fontsReady = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
   Promise.race([fontsReady, new Promise((r) => setTimeout(r, 2500))]).then(choose, choose);
@@ -194,7 +193,7 @@
         return;
       }
       loading = true;
-      import('./cert-carousel.js')
+      import('./cert-carousel.js?v=2')
         .then((m) =>
           m.createCarousel({
             container: stage,

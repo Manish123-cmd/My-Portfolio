@@ -17,7 +17,11 @@
      CONFIG — every tunable lives here
      ------------------------------------------------------------------------ */
   const CONFIG = {
-    breakpoint: 1024, // px. Below this: stacked layout, no pinning (keep in sync with css/welcome.css)
+    // Pinned hero → split on every screen at least this wide OR this tall (phones in
+    // portrait, tablets, laptops). Only short screens (phones held sideways) get the
+    // stacked layout. Keep in sync with css/welcome.css.
+    breakpoint: 1024,     // px wide
+    minStageHeight: 560,  // px tall
 
     scroll: {
       transitionVh: 100, // scroll distance (in vh) for hero → split
@@ -119,8 +123,8 @@
     const mm = gsap.matchMedia();
     mm.add(
       {
-        desktop: `(min-width: ${bp}px) and (prefers-reduced-motion: no-preference)`,
-        mobile: `(max-width: ${bp - 1}px) and (prefers-reduced-motion: no-preference)`,
+        desktop: `(min-width: ${bp}px) and (prefers-reduced-motion: no-preference), (min-height: ${CONFIG.minStageHeight}px) and (prefers-reduced-motion: no-preference)`,
+        mobile: `(max-width: ${bp - 1}px) and (max-height: ${CONFIG.minStageHeight - 1}px) and (prefers-reduced-motion: no-preference)`,
         reduce: '(prefers-reduced-motion: reduce)',
       },
       (ctx) => {

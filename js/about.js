@@ -23,7 +23,11 @@
      CONFIG
      ------------------------------------------------------------------------ */
   const CONFIG = {
-    breakpoint: 1024,            // px. Below this: stacked, no pin (keep in sync with css/about.css)
+    // Pinned stage on every screen at least this wide OR this tall (phones in portrait,
+    // tablets, laptops). Only short screens (phones held sideways) get the stacked layout.
+    // Keep in sync with css/about.css.
+    breakpoint: 1024,            // px wide
+    minStageHeight: 560,         // px tall
 
     scroll: {
       transitionVh: 100,         // scroll distance (vh) for centred → split
@@ -108,8 +112,8 @@
     const mm = gsap.matchMedia();
     mm.add(
       {
-        desktop: `(min-width: ${bp}px) and (prefers-reduced-motion: no-preference)`,
-        mobile: `(max-width: ${bp - 1}px) and (prefers-reduced-motion: no-preference)`,
+        desktop: `(min-width: ${bp}px) and (prefers-reduced-motion: no-preference), (min-height: ${CONFIG.minStageHeight}px) and (prefers-reduced-motion: no-preference)`,
+        mobile: `(max-width: ${bp - 1}px) and (max-height: ${CONFIG.minStageHeight - 1}px) and (prefers-reduced-motion: no-preference)`,
         reduce: '(prefers-reduced-motion: reduce)',
       },
       (ctx) => {
@@ -138,7 +142,8 @@
       const t = offsetWithin(text, stage);
       const bw = text.offsetWidth;
       const bh = text.offsetHeight;
-      const s = clamp(1, C.centre.width / bw, C.centre.maxScale);
+      // a little larger when centred, but never wider than 92% of the screen
+      const s = clamp(1, Math.min(C.centre.width / bw, (W * 0.92) / bw), C.centre.maxScale);
       m.s = s;
       m.x = (W - bw * s) / 2 - t.x;
       m.y = (H - bh * s) / 2 + H * C.centre.offsetY - t.y;
